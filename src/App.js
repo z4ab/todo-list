@@ -1,24 +1,41 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState, createRef } from 'react';
 
 function App() {
+  const inputRef = createRef();
+
+  const [items, setItems] = useState([]);
+
+  function addItem() {
+    if (inputRef.current.value == "") {
+      return
+    }
+    console.log(inputRef.current.value)
+    var nextitems = [...items, inputRef.current.value]
+    setItems(nextitems);
+    inputRef.current.value = ""
+  }
+
+  function handleEnter(event) {
+    if (event.key == "Enter") {
+      addItem()
+    }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div>
+      <header>
+        <h1>To-do List</h1>
       </header>
-    </div>
+      <input type="text" ref={inputRef} onKeyUp={handleEnter}/>
+      <input type="button" value="Add Item" onClick={addItem}/>
+      <ol>
+        {items.map((item) =>
+            <li>{item}<input type="checkbox"/></li>
+          )
+        }
+      </ol>
+    </div >
   );
 }
 
